@@ -1,6 +1,7 @@
 #include "data_include/data_reader.hpp"
 
 map<string, boost::weak_ptr<Body> > DataReader::global_bodies;
+
 static boost::mutex bodies_mutex;
 DataReader::DataReader(const LayerParameter& param){
 	ptr_pair.reset(new QueuePair(
@@ -13,7 +14,7 @@ DataReader::DataReader(const LayerParameter& param){
 		ptr_body.reset(new Body(param));
 		global_bodies[hash_key] = boost::weak_ptr<Body>(ptr_body);
 	}
-	ptr_body->new_pairs.push(ptr_pair);
+	ptr_body->new_pairs.push_back(ptr_pair);
 }
 
 
@@ -40,13 +41,13 @@ QueuePair::~QueuePair(){
 }
 
 Body::Body(const LayerParameter& param) :param(param){
-	//	start reading immediately when constructor complete 
+	//	start reading immediately when constructor complete
 	//	it is async comparing with main thread and blob-making thread
 	startThread();
 }
 
 Body::~Body() {
-	// stop reading 
+	// stop reading
 	//force_stop = true;
 	stopThread();
 }
@@ -72,23 +73,15 @@ void Body::interfaceKernel(){
 	boost::shared_ptr<DB> db(GetDB(param.data_param().backend()));
 	db->Open(param.data_param().source(), DB::READ);
 	boost::shared_ptr<Cursor> cursor(db->NewCursor());
-	vector<boost::shared_ptr<QueuePair> >  container;
 	try{
 		//	default solver_count=1
 		int solver_count = param.phase() == TRAIN ? Dragon::get_solver_count() : 1;
-		//	initialize the shape of the container
-		for (int i = 0; i < solver_count; i++){
-			boost::shared_ptr<QueuePair> pair(new_pairs.pop());
-			read_one(cursor.get(), pair.get());
-			container.push_back(pair);
-		}
 		//	working period
 		while (!must_stop()){
-			for (int i = 0; i < solver_count; i++) 
-				read_one(cursor.get(), container[i].get());
-			CHECK_EQ(new_pairs.size(), 0);
+			for (int i = 0; i < solver_count; i++)
+				read_one(cursor.get(), new_pairs[i].get());
 		}
+		CHECK_EQ(new_pairs.size(), solver_count);
 		//  complex condition
 	} catch (boost::thread_interrupted&) {}
-	cursor->SeekToFirst();
 }

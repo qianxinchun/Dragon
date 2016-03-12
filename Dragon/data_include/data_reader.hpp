@@ -26,13 +26,13 @@ class Body :public DragonThread{
 public:
 	Body(const LayerParameter& param);
 	virtual ~Body();
-	BlockingQueue<boost::shared_ptr<QueuePair> > new_pairs;
+	vector<boost::shared_ptr<QueuePair>> new_pairs;
 protected:
 	void interfaceKernel();
 	void read_one(Cursor *cursor, QueuePair *pair);
 	LayerParameter param;
-
 };
+
 class DataReader
 {
 public:
