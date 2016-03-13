@@ -1,15 +1,25 @@
 #include "data_include/db_lmdb.hpp"
-#include "direct.h"
-//Windows includes "direct.h" for _mkdir(dir)
-//Linux includes "sys/stat.h" for mkdir(dir,authority
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+
 const size_t LMDB_MAP_SIZE = 1099511627776;		//1 TB
 void LMDB::Open(const string& source, Mode mode){
 	MDB_CHECK(mdb_env_create(&mdb_env));
 	MDB_CHECK(mdb_env_set_mapsize(mdb_env, LMDB_MAP_SIZE));
 	boost::filesystem::path db_path(source);
 	if (!boost::filesystem::exists(db_path)){
-		if (mode == NEW)
-			CHECK_EQ(_mkdir(source.c_str()), 0) << "Specified DB path is illegal.";
+		if (mode == READ)
+			LOG(FATAL) << "Specified DB path is illegal [Read Operation].";
+		if (mode == NEW){
+			if (!boost::filesystem::create_directory(db_path))
+				LOG(FATAL) << "Specified DB path is illegal [NEW Operation].";
+		}
+	}else{
+		//	delete old dir and create new dir
+		if (mode == NEW){
+			boost::filesystem::remove_all(db_path);
+			boost::filesystem::create_directory(db_path);
+		}
 	}
 	int flags = 0;
 	if (mode == READ) flags = MDB_RDONLY | MDB_NOTLS;
