@@ -1,12 +1,16 @@
 #include "data_include/db_lmdb.hpp"
-#include "direct.h" 
+#include "direct.h"
 //Windows includes "direct.h" for _mkdir(dir)
 //Linux includes "sys/stat.h" for mkdir(dir,authority
 const size_t LMDB_MAP_SIZE = 1099511627776;		//1 TB
 void LMDB::Open(const string& source, Mode mode){
 	MDB_CHECK(mdb_env_create(&mdb_env));
 	MDB_CHECK(mdb_env_set_mapsize(mdb_env, LMDB_MAP_SIZE));
-	if (mode == NEW) CHECK_EQ(_mkdir(source.c_str()), 0);
+	boost::filesystem::path db_path(source);
+	if (!boost::filesystem::exists(db_path)){
+		if (mode == NEW)
+			CHECK_EQ(_mkdir(source.c_str()), 0) << "Specified DB path is illegal.";
+	}
 	int flags = 0;
 	if (mode == READ) flags = MDB_RDONLY | MDB_NOTLS;
 	int rc = mdb_env_open(mdb_env, source.c_str(), flags, 0664);
@@ -14,14 +18,14 @@ void LMDB::Open(const string& source, Mode mode){
 	MDB_CHECK(rc);
 #endif
 	if (rc == EACCES){
-		printf("Permission denied. Trying with MDB_NOLOCK\n");
+		LOG(INFO) << "Permission denied. Trying with MDB_NOLOCK\n";
 		mdb_env_close(mdb_env);
 		MDB_CHECK(mdb_env_create(&mdb_env));
 		flags |= MDB_NOLOCK;
 		MDB_CHECK(mdb_env_open(mdb_env, source.c_str(), flags, 0664));
 	}
 	else MDB_CHECK(rc);
-	printf("Open lmdb file: %s\n", source.c_str());
+	LOG(INFO) << "Open lmdb file:" << source;
 }
 
 LMDBCursor* LMDB::NewCursor(){
