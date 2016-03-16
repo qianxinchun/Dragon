@@ -68,7 +68,7 @@ void SyncedMemory::set_cpu_data(void *data){
 
 void SyncedMemory::set_gpu_data(void *data){
 #ifndef CPU_ONLY
-	if (own_cpu_data) dragonGpuFree(gpu_ptr);
+	if (own_gpu_data) dragonGpuFree(gpu_ptr);
 	gpu_ptr = data;
 	head_ = HEAD_AT_GPU;
 	own_gpu_data = false;
