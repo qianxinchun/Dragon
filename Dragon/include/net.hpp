@@ -12,26 +12,31 @@ public:
 	virtual ~Net() {}
 	static bool stateMeetRule(const NetState& state, const NetStateRule& rule, const string& name);
 	static void filterNet(const NetParameter& param,NetParameter* filtered_param);
+	void reshape(){
+		for (int i = 0; i < layers.size(); i++)
+			layers[i]->reshape(bottom_vecs[i], top_vecs[i]);
+	}
 	void Init(const NetParameter& in_param);
 	Dtype forwardFromTo(int start, int end);
 	Dtype forwardFrom(int start);
 	Dtype forwardTo(int end);
-	const vector<Blob<Dtype>*>& forwardPrefilled(Dtype* loss = NULL);
-	const vector<Blob<Dtype>*>& forward(const vector<Blob<Dtype>*>& bottom, Dtype *loss = NULL);
+	const vector<Blob<Dtype>*>& forward(Dtype *loss = NULL);
 	void backwardFromTo(int start, int end);
 	void backwardFrom(int start);
 	void backwardTo(int end);
 	void backward();
-	Dtype forwardBackward(const vector<Blob<Dtype>*>& bottom){
+	Dtype forwardBackward(){
 		Dtype loss;
-		forward(bottom, &loss);
+		forward(&loss);
 		backward();
 		return loss;
 	}
 	void clearParamDiffs();
 	void shareTrainedLayerWith(const Net* other);
 	void copyTrainedLayerFrom(const NetParameter& param);
+	void copyTrainedLayerFrom(const string& filename);
 	const vector<boost::shared_ptr<Layer<Dtype> > >& getLayers() const {return layers;}
+	const vector<boost::shared_ptr<Blob<Dtype> > >& getBlobs() const { return blobs; }
 	const vector<string>& getLayerNames() const { return layer_names; }
 	const vector<int>& getOutputBlobIdx() const { return net_output_blob_indices; }
 	const vector<string>& getBlobNames() const { return blobs_name; }
@@ -41,25 +46,7 @@ public:
 	const vector<float> getDecayMults() const{ return params_decay; }
 	const vector<float> getLrMults() const{ return params_lr; }
 	const string& getNetName() const { return name; }
-	void ToProto(NetParameter* param, bool write_diff = false);
-	/*
-	//const vector<Blob<Dtype>*>& forwardPrefilled(Dtype* loss = NULL);
-	//
-	//void backwardTo(int end);
-	//
-	//void clearParamDiffs();
-	//void backward();
-	//void backwardFrom(int start);
-	//void backwardTo(int end);
-	//void reshape();
-	Dtype forwardBackward(const vector<Blob<Dtype>*>& bottom){
-		Dtype loss;
-		forward(bottom, &loss);
-		backward();
-		return loss;
-	}
-	//void update();
-	*/
+	void ToProto(NetParameter* param, bool write_diff = false) const;
 	void shareWeights();
 protected:
 	const Net* root_net;
@@ -84,7 +71,7 @@ protected:
 	vector<vector<Blob<Dtype>*> > bottom_vecs;
 	vector<vector<int> > bottom_id_vecs;
 	vector<vector<bool> > bottoms_need_backward;
-	//	store for param 
+	//	store for param
 	vector<Dtype> blobs_loss_weight;
 	vector<vector<int> > param_id_vecs;
 	vector<string> param_display_names;

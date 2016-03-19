@@ -8,7 +8,7 @@ Net<Dtype>::Net(const NetParameter& param, const Net* root_net):
 	Init(param);
 }
 
-//	usually create a net from a prototxt file 
+//	usually create a net from a prototxt file
 template <typename Dtype>
 Net<Dtype>::Net(const string& param_file, Phase phase, const Net* root_net = NULL):
 	root_net(root_net){
@@ -36,14 +36,14 @@ bool Net<Dtype>::stateMeetRule(const NetState& state, const NetStateRule& rule, 
 	return true;
 }
 
-template <typename Dtype> 
+template <typename Dtype>
 void Net<Dtype>::filterNet(const NetParameter& param, NetParameter* filtered_param){
 	NetState state(param.state());
-	filtered_param->CopyFrom(param); 
+	filtered_param->CopyFrom(param);
 	// remove all layer params and then filter
 	filtered_param->clear_layer();
 	for (int i = 0; i < param.layer_size(); i++){
-		const LayerParameter& layer_param = param.layer(i); 
+		const LayerParameter& layer_param = param.layer(i);
 		const string& layer_name = layer_param.name();
 		//	usually a layer has not any include/exclude rules
 		CHECK(layer_param.include_size() == 0 || layer_param.exclude_size() == 0)
@@ -80,7 +80,7 @@ void Net < Dtype >::appendTop(const NetParameter& param, const int layer_id, con
 	//	I0721 10:38 : 16.722070  4692 net.cpp : 84] relu1 <-conv1
 	//	I0721 10:38 : 16.722082  4692 net.cpp : 98] relu1->conv1(in-place)
 	//	check a blob whether at the same postion in both bottom and top
-	if (blob_name_to_idx && layer_param && top_id < layer_param->bottom_size() 
+	if (blob_name_to_idx && layer_param && top_id < layer_param->bottom_size()
 		&& blob_name == layer_param->bottom(top_id)){
 		LOG_IF(INFO, Dragon::get_root_solver())
 			<< layer_param->name() << "[Layer-Produce]->" << blob_name << " [Blob-Name] (in-place)";
@@ -100,7 +100,7 @@ void Net < Dtype >::appendTop(const NetParameter& param, const int layer_id, con
 			//	special case and only used when viewing a Net's structure
 			//	because they need not specify data source and can not train or test
 			//	virtual data input blobs do not belong to any layers
-			//	see more in insert_splits.cpp/void InsertSplits() 
+			//	see more in insert_splits.cpp/void InsertSplits()
 			else LOG(INFO) << "Input " << top_id << "[Blob-Code] -> " << blob_name << "[Blob - Name]";
 		}
 		//	allocate a null blob at first
@@ -129,7 +129,7 @@ void Net < Dtype >::appendTop(const NetParameter& param, const int layer_id, con
 	}
 	//	a set used for listing all exsiting top blobs
 	if (available_blobs) available_blobs->insert(blob_name);
-} 
+}
 
 template <typename Dtype>
 int Net < Dtype >::appendBottom(const NetParameter& param, const int layer_id, const int bottom_id,
@@ -181,7 +181,7 @@ void Net<Dtype>::appendParam(const NetParameter& param, const int layer_id, cons
 	ParamSpec default_hyperparameter;
 	const ParamSpec* hyperparameter = param_id < param_size ?
 		&layer_param.param(param_id) : &default_hyperparameter;
-	//	do not have a name or 
+	//	do not have a name or
 	if (!param_size || !param_name.size() ||
 		(param_name.size() && !param_names_index.count(param_name))){
 		param_owners.push_back(-1);
@@ -189,7 +189,7 @@ void Net<Dtype>::appendParam(const NetParameter& param, const int layer_id, cons
 		if (param_name.size()) param_names_index[param_name] = net_param_id;
 		const int learnable_param_id = learnable_params.size();
 		learnable_params.push_back(param_blobs[net_param_id].get());
-		learnable_param_ids.push_back(learnable_param_id); 
+		learnable_param_ids.push_back(learnable_param_id);
 		has_params_lr.push_back(hyperparameter->has_lr_mult());
 		has_params_decay.push_back(hyperparameter->has_decay_mult());
 		params_lr.push_back(hyperparameter->lr_mult());
@@ -217,7 +217,7 @@ void Net<Dtype>::appendParam(const NetParameter& param, const int layer_id, cons
 		const int learnable_param_id = learnable_param_ids[owner_net_param_id];
 		//	store parent id
 		learnable_param_ids.push_back(learnable_param_id);
-		//	check lr_mult 
+		//	check lr_mult
 		if (hyperparameter->has_lr_mult()){
 			if (has_params_lr[learnable_param_id])
 				CHECK_EQ(hyperparameter->lr_mult(), params_lr[learnable_param_id])
@@ -250,7 +250,7 @@ void Net<Dtype>::Init(const NetParameter& in_param){
 	/*
 	LOG_IF(INFO, Dragon::get_root_solver())
 		<< "Initialize net from parameters: " << endl << filtered_param.DebugString();*/
-	//	split a top blob_name into several top blobs and insert(organize) them 
+	//	split a top blob_name into several top blobs and insert(organize) them
 	insertSplits(filtered_param, &param);
 	name = param.name();
 	LOG_IF(INFO, Dragon::get_root_solver())
@@ -405,10 +405,10 @@ void Net<Dtype>::Init(const NetParameter& in_param){
 			layer_need_backward[layer_id] = true;
 			for (int bottom_id = 0; bottom_id < bottom_vecs[layer_id].size(); bottom_id++){
 				//	set for bottoms
-				bottoms_need_backward[layer_id][bottom_id] = 
+				bottoms_need_backward[layer_id][bottom_id] =
 					bottoms_need_backward[layer_id][bottom_id]||layers[layer_id]->allowForceBackward(bottom_id);
 				//	set for blobs
-				blobs_need_backward[bottom_id_vecs[layer_id][bottom_id]] = 
+				blobs_need_backward[bottom_id_vecs[layer_id][bottom_id]] =
 					blobs_need_backward[bottom_id_vecs[layer_id][bottom_id]]||bottoms_need_backward[layer_id][bottom_id];
 			}
 			//	set for params
@@ -457,17 +457,11 @@ Dtype Net<Dtype>::forwardTo(int end){
 }
 
 template <typename Dtype>
-const vector<Blob<Dtype>*>& Net<Dtype>::forwardPrefilled(Dtype* loss = NULL){
+const vector<Blob<Dtype>*>& Net<Dtype>::forward(Dtype* loss = NULL){
 	if (loss != NULL) *loss = forwardFromTo(0, layers.size() - 1);
 	else forwardFromTo(0, layers.size() - 1);
 	//	usually return empty vector
 	return net_output_blobs;
-}
-
-template <typename Dtype>
-const vector<Blob<Dtype>*>& Net<Dtype>::forward(const vector<Blob<Dtype>*>& bottom, Dtype *loss = NULL){
-	for (int i = 0; i < bottom.size(); i++) net_input_blobs[i]->CopyFrom(*bottom[i]);
-	return forwardPrefilled(loss);
 }
 
 //	clear param diffs, used in Solver::step()
@@ -504,8 +498,8 @@ void Net<Dtype>::shareTrainedLayerWith(const Net* other){
 		if (target_layer_id == layer_names.size()) continue;
 		//	need not use learnable_params
 		//	shared blobs have been set through pointer in shareWeights()
-		vector < boost::shared_ptr<Blob<Dtype>>>& target_blobs = layers[target_layer_id]->getBlobs();
-		vector < boost::shared_ptr<Blob<Dtype>>>& source_blobs = source_layer->getBlobs();
+		const vector < boost::shared_ptr<Blob<Dtype>>>& target_blobs = layers[target_layer_id]->getBlobs();
+		const vector < boost::shared_ptr<Blob<Dtype>>>& source_blobs = source_layer->getBlobs();
 		CHECK_EQ(target_blobs.size(), source_blobs.size())
 			<< "Test net use layer: " << source_layer_name << " has incompatible number of blobs.";
 		for (int j = 0; j < source_blobs.size(); j++){
@@ -530,7 +524,7 @@ void Net<Dtype>::copyTrainedLayerFrom(const NetParameter& param){
 			target_layer_id++;
 		}
 		if (target_layer_id == layer_names.size()) continue;
-		vector < boost::shared_ptr<Blob<Dtype>>>& target_blobs = layers[target_layer_id]->getBlobs();
+		const vector < boost::shared_ptr<Blob<Dtype>>>& target_blobs = layers[target_layer_id]->getBlobs();
 		for (int j = 0; j < target_blobs.size(); j++){
 			Blob<Dtype> source_blob;
 			source_blob.FromProto(source_layer.blobs(j));
@@ -541,6 +535,14 @@ void Net<Dtype>::copyTrainedLayerFrom(const NetParameter& param){
 		}
 	}
 }
+
+template <typename Dtype>
+void Net<Dtype>::copyTrainedLayerFrom(const string& filename){
+	NetParameter net_param;
+	readProtoFromBinaryFileOrDie(filename.c_str(), &net_param);
+	copyTrainedLayerFrom(net_param);
+}
+
 
 template <typename Dtype>
 void Net<Dtype>::backwardFromTo(int start, int end){
@@ -577,7 +579,7 @@ void Net<Dtype>::shareWeights(){
 }
 
 template <typename Dtype>
-void Net<Dtype>::ToProto(NetParameter* param, bool write_diff = false){
+void Net<Dtype>::ToProto(NetParameter* param, bool write_diff = false) const{
 	//	why not copy NetParameter
 	param->Clear();
 	param->set_name(this->name);
@@ -591,4 +593,4 @@ void Net<Dtype>::ToProto(NetParameter* param, bool write_diff = false){
 }
 
 
-INSTANTIATE_CLASS(Net); 
+INSTANTIATE_CLASS(Net);

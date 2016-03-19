@@ -19,16 +19,11 @@ template<typename Dtype>
 void Blob<Dtype>::reshape(vector<int> shape){
 	count_ = 1;
 	shape_.resize(shape.size());
-	if (!shape_data_ || shape_data_->size() < shape.size() * sizeof(int)) {
-		shape_data_.reset(new SyncedMemory(shape.size() * sizeof(int)));
-	}
-	int* shape_data = static_cast<int*>(shape_data_->mutable_cpu_data());
 	for (int i = 0; i < shape.size(); ++i) {
 		count_ *= shape[i];
 		shape_[i] = shape[i];
-		shape_data[i] = shape[i];
 	}
-	//	if new count ¡Ù old capacity
+	//	if new count â‰  old capacity
 	//	recycle and allocate memory again
 	if (count_ > capacity_) {
 		capacity_ = count_;
@@ -179,7 +174,7 @@ void Blob<Dtype>::scale_diff(Dtype scale_factor) {
 }
 
 
-template<typename Dtype> 
+template<typename Dtype>
 Dtype Blob<Dtype>::asum_data(){
 	switch(data_->head()){
 	case SyncedMemory::SyncedHead::HEAD_AT_CPU:
@@ -212,7 +207,6 @@ void Blob<Dtype>::FromProto(const BlobProto& proto, bool need_reshape = true){
 	}
 	if (proto.diff_size()>0){
 		CHECK_EQ(proto.diff_size(), count());
-		//	Attention: call this will cause memory error(unknown bug)
 		Dtype *diff = mutable_cpu_diff();
 		for (int i = 0; i < count_; i++) diff[i] = proto.diff(i);
 	}
@@ -230,26 +224,6 @@ void Blob<Dtype>::ToProto(BlobProto* proto, bool write_diff){
 	for (int i = 0; i < count_; i++)  proto->add_data(data[i]);
 	if (write_diff)
 		for (int i = 0; i < count_; i++)  proto->add_diff(diff[i]);
-}
-
-template<typename Dtype>
-void Blob<Dtype>::CopyFrom(const Blob<Dtype>& source, bool copy_diff = false, bool reshape = false){
-	if (source.count() != count() || source.shape() != shape()) {
-		if (reshape) reshapeLike(source);
-		else LOG(FATAL) << "Trying to copy blobs of different sizes.";
-	}
-	switch (Dragon::get_mode()) {
-	case Dragon::GPU:
-		if (copy_diff) dragon_gpu_copy(count(), static_cast<Dtype*>(diff_->mutable_gpu_data()), source.gpu_diff());
-		else dragon_gpu_copy(count(), static_cast<Dtype*>(data_->mutable_gpu_data()), source.gpu_data());
-		break;
-	case Dragon::CPU:
-		if (copy_diff) dragon_copy(count(), static_cast<Dtype*>(diff_->mutable_cpu_data()), source.cpu_diff());
-		else dragon_copy(count(), static_cast<Dtype*>(data_->mutable_cpu_data()), source.cpu_data());
-		break;
-	default:
-		LOG(FATAL) << "Unknown mode.";
-	}
 }
 
 

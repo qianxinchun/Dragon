@@ -16,8 +16,6 @@ class Blob{
 public:
 	Blob():data_(),diff_(),count_(0), capacity_(0) {}
 	Blob(const vector<int>& shape) :count_(0),capacity_(0) { reshape(shape); }
-	void FromProto(const BlobProto& proto, bool need_reshape = true);
-	void ToProto(BlobProto* proto, bool write_diff = false);
 	void reshape(int num, int channels, int height, int width);
 	void reshape(vector<int> shape);
 	void reshape(const BlobShape& blob_shape);
@@ -87,16 +85,16 @@ public:
 	//	change the shared_ptr object and will recycle the memory if need
 	void shareData(const Blob& blob) {
 		CHECK_EQ(count(), blob.count());
-		data_ = blob.data(); 
+		data_ = blob.data();
 	}
 	void shareDiff(const Blob& blob) {
 		CHECK_EQ(count(), blob.count());
 		diff_ = blob.diff();
 	}
-	void CopyFrom(const Blob<Dtype>& source, bool copy_diff = false,bool reshape = false);
-	int count_, capacity_;
+	void FromProto(const BlobProto& proto, bool need_reshape = true);
+	void ToProto(BlobProto* proto, bool write_diff = false);
 protected:
-	boost::shared_ptr<SyncedMemory> data_, diff_, shape_data_;
+	boost::shared_ptr<SyncedMemory> data_, diff_;
 	vector<int> shape_;
-	
+	int count_, capacity_;
 };

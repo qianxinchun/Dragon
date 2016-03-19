@@ -40,7 +40,7 @@ void Solver<Dtype>::checkSnapshotWritePermission(){
 
 template <typename Dtype>
 void Solver<Dtype>::initTrainNet(){
-	const int num_train_nets = param.has_net_file() + param.has_net_param() + 
+	const int num_train_nets = param.has_net_file() + param.has_net_param() +
 		param.has_train_net_file() + param.has_train_net_param();
 	const string& field_names = "net_file/net_param/train_net_file/train_net_param";
 	CHECK_GE(num_train_nets, 1)
@@ -77,7 +77,7 @@ void Solver<Dtype>::initTrainNet(){
 		net_state.MergeFrom(param.train_state());	//	high prio (default: not set)
 	//	merge to net_state
 	net_param.mutable_state()->CopyFrom(net_state);
-	//	create and init net after parsing net_param 
+	//	create and init net after parsing net_param
 	if (Dragon::get_root_solver())
 		net.reset(new Net<Dtype>(net_param));
 	else net.reset(new Net<Dtype>(net_param, root_solver->net.get()));
@@ -150,7 +150,7 @@ void Solver<Dtype>::init(const SolverParameter& param){
 	LOG_IF(INFO, Dragon::get_root_solver()) << "Initialize solver from parameters: "
 		<< endl << param.DebugString();
 	CHECK_GE(param.average_loss(), 1) << "Average loss should greater equal than 1.";
-	checkSnapshotWritePermission(); 
+	checkSnapshotWritePermission();
 	//	set seed for random_generator if necessary
 	if (Dragon::get_root_solver() && param.random_seed() >= 0)
 		Dragon::set_random_seed(param.random_seed());
@@ -185,7 +185,7 @@ void Solver<Dtype>::solve(const char* resume_file){
 
 	if (param.display() && iter%param.display() == 0){
 		Dtype loss;
-		net->forwardPrefilled(&loss);
+		net->forward(&loss);
 		LOG(INFO) << "Iteration " << iter << ", loss = " << loss;
 	}
 
@@ -227,11 +227,10 @@ template <typename Dtype>
 void Solver<Dtype>::test(int net_id){
 	CHECK(Dragon::get_root_solver());
 	LOG(INFO) << "Train iteration: " << iter << ", Test net #" << net_id << ": ";
-	//	share params 
+	//	share params
 	test_nets[net_id]->shareTrainedLayerWith(net.get());
 	vector<Dtype> test_score;
 	vector<int> output_id;
-	vector<Blob<Dtype>*> bottom_vec;
 	Net<Dtype>* test_net = test_nets[net_id].get();
 	Dtype loss = 0;
 	//	scan for all batches
@@ -244,7 +243,7 @@ void Solver<Dtype>::test(int net_id){
 		}
 		if (need_early_stopping) break;
 		Dtype iter_loss;
-		const vector<Blob<Dtype>*>& result = test_net->forward(bottom_vec, &iter_loss);
+		const vector<Blob<Dtype>*>& result = test_net->forward(&iter_loss);
 		if (param.test_compute_loss()) loss += iter_loss;
 		if (i == 0){
 			for (int j = 0; j < result.size(); j++){
@@ -280,7 +279,7 @@ void Solver<Dtype>::test(int net_id){
 		LOG(INFO) << "		Test net output #" << i << "(" << output_name << "): "
 			<< mean_score << msg.str();
 	}
-} 
+}
 
 template <typename Dtype>
 void Solver<Dtype>::testAll(){
@@ -292,7 +291,6 @@ void Solver<Dtype>::testAll(){
 
 template <typename Dtype>
 void Solver<Dtype>::step(int iters){
-	vector <Blob<Dtype>*> bottom_vec;
 	const int start_iter = iter, stop_iter = iter + iters;
 	int average_loss = param.average_loss();
 	vector<Dtype> loss_vec;
@@ -311,7 +309,7 @@ void Solver<Dtype>::step(int iters){
 		for (int i = 0; i < callbacks.size(); i++) callbacks[i]->on_start();
 		const bool display = param.display() && iter%param.display() == 0;
 		Dtype loss = 0;
-		for (int i = 0; i < param.iter_size(); i++) loss += net->forwardBackward(bottom_vec);
+		for (int i = 0; i < param.iter_size(); i++) loss += net->forwardBackward();
 		//cout << loss << endl;
 		loss /= param.iter_size();
 		//	smoothed_loss use the last num_(average_loss) iters to average
