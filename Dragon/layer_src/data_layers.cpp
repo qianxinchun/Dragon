@@ -15,7 +15,6 @@ void BaseDataLayer<Dtype>::layerSetup(const vector<Blob<Dtype>*>& bottom, const 
 	//	Non-Labels
 	if (top.size() == 1) has_labels = false;
 	ptr_transformer.reset(new DataTransformer<Dtype>(transform_param, this->phase));
-	ptr_transformer->initRand();
 	//	implements in class DataLayer
 	dataLayerSetup(bottom, top);
 }
@@ -57,7 +56,7 @@ template<typename Dtype>
 void BasePrefetchingDataLayer<Dtype>::interfaceKernel(){
 	//	create GPU async stream
 	//	speed up memcpy between CPU and GPU
-	//	because cudaMemcpy will be called frequently 
+	//	because cudaMemcpy will be called frequently
 	//	rather than malloc gpu memory firstly(just call cudaMemcpy)
 #ifndef CPU_ONLY
 	cudaStream_t stream;
@@ -101,7 +100,7 @@ void BasePrefetchingDataLayer<Dtype>::forward_cpu(const vector<Blob<Dtype>*>& bo
 	free.push(batch);
 }
 
-//	two parallel threads:	
+//	two parallel threads:
 //	reader thread will start mmediately to buffer Queue<Datum*>
 //	prefetching thread will start after all the layerSetup finishing to buffer Queue<Batch*>
 template <typename Dtype>
@@ -111,7 +110,7 @@ DataLayer<Dtype>::DataLayer(const LayerParameter& param) :
 template <typename Dtype>
 void DataLayer<Dtype>::dataLayerSetup(const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top){
 	const int batch_size = param.data_param().batch_size();
-	//product 
+	//product
 	Datum datum = *(reader.full().peek());
 	vector<int> topShape = ptr_transformer->inferBlobShape(datum);
 	transformed_data.reshape(topShape);
@@ -143,7 +142,7 @@ void DataLayer<Dtype>::loadBatch(Batch<Dtype> *batch){
 		// must refer use '&' to keep data vaild(!!!important)
 		Datum &datum = *(reader.full().pop("Waiting for Datum data"));
 		int offset = batch->data.offset(i);
-		//	share a part of a blob memory 
+		//	share a part of a blob memory
 		transformed_data.set_cpu_data(base_data + offset);
 		//	transform datum and copy its value to the part of blob memory
 		if (has_labels) base_label[i] = datum.label();

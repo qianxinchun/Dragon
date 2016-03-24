@@ -21,6 +21,7 @@ DataTransformer<Dtype>::DataTransformer(const  TransformationParameter& param, P
 		for (int i = 0; i < param.mean_value_size(); i++)
 			mean_vals.push_back(param.mean_value(i));
 	}
+	initRand();
 }
 
 template<typename Dtype>
