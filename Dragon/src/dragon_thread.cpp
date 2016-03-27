@@ -29,7 +29,7 @@ void DragonThread::startThread(){
 #endif
 	Dragon::Mode mode = Dragon::get_mode();
 	unsigned int seed = Dragon::get_random_value();
-	int solver_count = Dragon::get_root_solver();
+	int solver_count = Dragon::get_solver_count();
 	bool root_solver = Dragon::get_root_solver();
 	try{
 		thread.reset(new boost::thread(&DragonThread::initializeThread,
@@ -59,7 +59,7 @@ bool DragonThread::is_start(){
 
 bool DragonThread::must_stop(){
 
-	//return true once call thread->interrupt() 
+	//return true once call thread->interrupt()
 	//break Reading-LOOP and complete the thread's working function
 	return boost::this_thread::interruption_requested();
 }
