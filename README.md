@@ -1,10 +1,10 @@
 # Dragon
-山寨牌深度学习框架
 
-基于Berkeley Vision and Learning Center (BVLC)的Caffe，二次改写而成
-- 简化Caffe结构
-- 添加部分最新论文的实现
-- 字里行间充满了友好的注释
+Dragon: a Deep Learning Framework in development (Alpha. Ver)
 
-实现细节见我的博客：
-http://www.cnblogs.com/neopenx/
+Author: PanTing, HeFei University of Technology at Xuancheng
+
+We will change the architecture frequently before the Beta Version
+This reop is also regarded as the Author's Graduation Project
+
+Thanks to Caffe & Theano
