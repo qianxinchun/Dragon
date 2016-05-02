@@ -34,13 +34,12 @@ public:
 	Dtype asum_data();
 	Dtype sumsq_diff() const;
 	void scale_diff(Dtype scale_factor);
-	int num() { return shape(0); }
-	int channels() { return shape(1); }
-	int height() { return shape(2); }
-	int width() { return shape(3); }
+	int num() const { return shape(0); }
+	int channels() const { return shape(1); }
+	int height() const { return shape(2); }
+	int width() const { return shape(3); }
 	int count() const{ return count_; }
 	int count(int start_axis, int end_axis) const {
-		CHECK_GE(start_axis, 0);
 		CHECK_GE(start_axis, 0);
 		CHECK_LE(start_axis, end_axis);
 		CHECK_LE(start_axis, num_axes());
