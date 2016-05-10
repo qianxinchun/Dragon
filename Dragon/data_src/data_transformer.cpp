@@ -63,56 +63,56 @@ void DataTransformer<Dtype>::transform(const Datum& datum, Dtype* shadow_data){
 	//	pixel can be compressed as a string
 	//	cause each pixel ranges from 0~255 (a char)
 	const string& data = datum.data();
-	const int channels = datum.channels();
-	const int height = datum.height();
-	const int width = datum.width();
+	const int datum_channels = datum.channels();
+	const int datum_height = datum.height();
+	const int datum_width = datum.width();
 	const int crop_size = param.crop_size();
 	const Dtype scale = param.scale();
-	const bool must_mirror = param.mirror(); //need rand!!!
+	const bool need_mirror = param.mirror() && rand(2); // random mirrow
 	const bool has_mean_file = param.has_mean_file();
-	const bool has_uint8 = data.size() > 0; //pixels are compressed as a string
+	const bool has_uint8 = data.size() > 0;		//	pixels are compressed as a string
 	const bool has_mean_value = mean_vals.size() > 0;
-	CHECK_GT(channels, 0);
-	CHECK_GE(height, crop_size);
-	CHECK_GE(width, crop_size);
+	CHECK_GT(datum_channels, 0);
+	CHECK_GE(datum_height, crop_size);
+	CHECK_GE(datum_width, crop_size);
 	Dtype *mean = NULL;
 	if (has_mean_file){
-		CHECK_EQ(channels, mean_blob.channels());
-		CHECK_EQ(height, mean_blob.height());
-		CHECK_EQ(width, mean_blob.width());
+		CHECK_EQ(datum_channels, mean_blob.channels());
+		CHECK_EQ(datum_height, mean_blob.height());
+		CHECK_EQ(datum_width, mean_blob.width());
 		mean = mean_blob.mutable_cpu_data();
 	}
 	if (has_mean_value){
-		CHECK(mean_vals.size() == 1 || mean_vals.size() == channels)
+		CHECK(mean_vals.size() == 1 || mean_vals.size() == datum_channels)
 			<< "Channel's mean value must be provided as a single value or as many as channels.";
 		//replicate
-		if (channels > 1 && mean_vals.size() == 1)
-			for (int i = 0; i < channels - 1; i++)
+		if (datum_channels > 1 && mean_vals.size() == 1)
+			for (int i = 0; i < datum_channels - 1; i++)
 				mean_vals.push_back(mean_vals[0]);
 	}
-	int h_off = 0, w_off = 0, h = height, w = width;
+	int h_off = 0, w_off = 0, height = datum_height, width = datum_width;
 	if (crop_size){
-		h = crop_size;
-		w = crop_size;
+		height = crop_size;
+		width = crop_size;
 		//	train phase using random croping
 		if (phase == TRAIN){
-			h_off = rand(height - h + 1);
-			w_off = rand(width- w + 1);
+			h_off = rand(datum_height - height + 1);
+			w_off = rand(datum_width - width + 1);
 		}
 		//	test phase using expected croping
 		else{
-			h_off = (height - h)/2;
-			w_off = (width - w)/2;
+			h_off = (datum_height - height) / 2;
+			w_off = (datum_width - width) / 2;
 		}
 	}
 	Dtype element;
 	int top_idx, data_idx;
 	//copy datum values to shadow_data-> batch
-	for (int c = 0; c < channels; c++){
+	for (int c = 0; c < datum_channels; c++){
 		for (int h = 0; h < height; h++){
 			for (int w = 0; w < width; w++){
-				data_idx = (c*height + h_off + h)*width + w_off + w;
-				if (must_mirror)	top_idx = (c*height + h)*width + (width - 1 - w); //top_left=top_right
+				data_idx = (c*datum_height + h_off + h)*datum_width + w_off + w;
+				if (need_mirror)	top_idx = (c*height + h)*width + (width - 1 - w); //top_left=top_right
 				else	top_idx = (c*height + h)*width + w;
 				if (has_uint8){
 					//	char type can not cast to Dtype directly
@@ -127,6 +127,7 @@ void DataTransformer<Dtype>::transform(const Datum& datum, Dtype* shadow_data){
 		}
 	}
 }
+
 template<typename Dtype>
 void DataTransformer<Dtype>::transform(const Datum& datum, Blob<Dtype>* shadow_blob){
 	const int num = shadow_blob->num();
