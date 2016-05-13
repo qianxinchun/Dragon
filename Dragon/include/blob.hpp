@@ -1,14 +1,15 @@
-#pragma once
+# ifndef BLOB_HPP
+# define BLOB_HPP
 #pragma warning(disable:4244)
 #pragma warning(disable:4267)
 #pragma warning(disable:4081)
 #pragma warning(disable:4996)
 #pragma warning(disable:4005)
 #pragma warning(disable:4018)
-#include "include/synced_mem.hpp"
-#include "include/common.hpp"
-#include "vector"
-#include "include/dragon.pb.h"
+#include <vector>
+#include "syncedmem.hpp"
+#include "common.hpp"
+#include "protos/dragon.pb.h"
 using namespace std;
 using namespace boost;
 template <typename Dtype>
@@ -70,10 +71,20 @@ public:
 		CHECK_LE(w, width());
 		return ((n * channels() + c) * height() + h) * width() + w;
 	}
+	int offset(const vector<int>& vec){
+		CHECK_LE(vec.size(), num_axes());
+		int offset = 0;
+		for (int i = 0; i < num_axes(); i++){
+			offset *= shape(i);
+			if (vec.size()>i) offset += vec[i];
+		}
+		return offset;
+	}
 	int num_axes() const { return shape_.size(); }
 	// idx ranges [-axes,axes)
 	// idx(-1) means the last axis
 	int canonicalAxisIndex(int axis) const{
+		//cout << shape_string() << endl;
 		CHECK_GE(axis, -num_axes());
 		CHECK_LT(axis, num_axes());
 		if (axis < 0) return axis + num_axes();
@@ -84,7 +95,7 @@ public:
 	//	change the shared_ptr object and will recycle the memory if need
 	void shareData(const Blob& blob) {
 		CHECK_EQ(count(), blob.count());
-		data_ = blob.data();
+		data_ = blob.data(); 
 	}
 	void shareDiff(const Blob& blob) {
 		CHECK_EQ(count(), blob.count());
@@ -97,3 +108,11 @@ protected:
 	vector<int> shape_;
 	int count_, capacity_;
 };
+
+template<typename Dtype>
+class Batch{
+public:
+	Blob<Dtype> data, label;
+};
+
+# endif

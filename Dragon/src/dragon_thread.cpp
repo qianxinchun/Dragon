@@ -1,6 +1,7 @@
-#include "include/dragon_thread.hpp"
+#include <iostream>
+#include "dragon_thread.hpp"
 #include "direct.h"
-#include "iostream"
+
 using namespace std;
 //	parameters list tranfers from parent thread(main thread)
 //	refer this function when create a boost::thread(child thread)
@@ -59,7 +60,7 @@ bool DragonThread::is_start(){
 
 bool DragonThread::must_stop(){
 
-	//return true once call thread->interrupt()
+	//return true once call thread->interrupt() 
 	//break Reading-LOOP and complete the thread's working function
 	return boost::this_thread::interruption_requested();
 }

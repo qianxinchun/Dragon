@@ -1,6 +1,8 @@
 #ifndef DRAGON_THREAD_HPP
 #define DRAGON_THREAD_HPP
-#include "include/common.hpp"
+
+#include "common.hpp"
+
 class DragonThread
 {
 public:

@@ -1,5 +1,6 @@
-#include "include/blob.hpp"
-#include "include/synced_mem.hpp"
+#include "blob.hpp"
+#include "syncedmem.hpp"
+
 template <typename Dtype>
 void Blob<Dtype>::reshape(int num,int channels,int height,int width) {
 	vector<int> shape(4);
@@ -23,7 +24,7 @@ void Blob<Dtype>::reshape(vector<int> shape){
 		count_ *= shape[i];
 		shape_[i] = shape[i];
 	}
-	//	if new count â‰  old capacity
+	//	if new count ¡Ù old capacity
 	//	recycle and allocate memory again
 	if (count_ > capacity_) {
 		capacity_ = count_;
@@ -174,7 +175,7 @@ void Blob<Dtype>::scale_diff(Dtype scale_factor) {
 }
 
 
-template<typename Dtype>
+template<typename Dtype> 
 Dtype Blob<Dtype>::asum_data(){
 	switch(data_->head()){
 	case SyncedMemory::SyncedHead::HEAD_AT_CPU:

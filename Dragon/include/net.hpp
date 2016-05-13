@@ -1,9 +1,8 @@
 #ifndef NET_HPP
 #define NET_HPP
-#include "include/dragon.pb.h"
-#include "include/common.hpp"
-#include "include/blob.hpp"
-#include "layer_include/layer.hpp"
+#include "common.hpp"
+#include "blob.hpp"
+#include "layer.hpp"
 template <typename Dtype>
 class Net{
 public:
@@ -13,7 +12,7 @@ public:
 	static bool stateMeetRule(const NetState& state, const NetStateRule& rule, const string& name);
 	static void filterNet(const NetParameter& param,NetParameter* filtered_param);
 	void reshape(){
-		for (int i = 0; i < layers.size(); i++)
+		for (int i = 0; i < layers.size(); i++) 
 			layers[i]->reshape(bottom_vecs[i], top_vecs[i]);
 	}
 	void Init(const NetParameter& in_param);
@@ -21,6 +20,7 @@ public:
 	Dtype forwardFrom(int start);
 	Dtype forwardTo(int end);
 	const vector<Blob<Dtype>*>& forward(Dtype *loss = NULL);
+	ResultGroup forwardWithResult();
 	void backwardFromTo(int start, int end);
 	void backwardFrom(int start);
 	void backwardTo(int end);
@@ -38,6 +38,7 @@ public:
 	const vector<boost::shared_ptr<Layer<Dtype> > >& getLayers() const {return layers;}
 	const vector<boost::shared_ptr<Blob<Dtype> > >& getBlobs() const { return blobs; }
 	const vector<string>& getLayerNames() const { return layer_names; }
+	const vector<int>& getInputBlobIdx() const { return net_input_blob_indices; }
 	const vector<int>& getOutputBlobIdx() const { return net_output_blob_indices; }
 	const vector<string>& getBlobNames() const { return blobs_name; }
 	const vector<Dtype>& getBlobLossWeights() const{ return blobs_loss_weight; }
@@ -54,6 +55,7 @@ protected:
 	string name;
 	int memory_used;
 	bool debug_info;
+	//	result
 	//	store layer
 	vector<boost::shared_ptr<Layer<Dtype> > > layers;
 	vector<string> layer_names;
@@ -71,7 +73,7 @@ protected:
 	vector<vector<Blob<Dtype>*> > bottom_vecs;
 	vector<vector<int> > bottom_id_vecs;
 	vector<vector<bool> > bottoms_need_backward;
-	//	store for param
+	//	store for param 
 	vector<Dtype> blobs_loss_weight;
 	vector<vector<int> > param_id_vecs;
 	vector<string> param_display_names;
