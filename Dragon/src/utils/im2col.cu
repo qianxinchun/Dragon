@@ -52,9 +52,10 @@ __global__ void col2im_gpu_kernel(const int n,const Dtype* col, const int height
 	 const int stride_h, const int stride_w, const int col_h, const int col_w, Dtype* im){
 	CUDA_KERNEL_LOOP(idx, n){
 		Dtype val = 0;
-		const int im_h = idx % height + pad_h;
-		const int im_w = (idx / height) % width + pad_w;
-		const int im_c = idx / height / width;
+		const int im_w = idx % width + pad_w;
+		const int im_h = (idx / width) % height + pad_h;
+		const int im_c = idx / (width * height);
+
 		const int w_start = (im_w < kernel_w) ? 0 : (im_w - kernel_w) / stride_w + 1;
 		//	consider for condition1 and condition 3
 		//	see more in im2col.cpp
