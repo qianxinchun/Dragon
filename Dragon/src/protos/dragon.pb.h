@@ -3,12 +3,7 @@
 
 #ifndef PROTOBUF_dragon_2eproto__INCLUDED
 #define PROTOBUF_dragon_2eproto__INCLUDED
-#pragma warning(disable:4244)
-#pragma warning(disable:4267)
-#pragma warning(disable:4081)
-#pragma warning(disable:4996)
-#pragma warning(disable:4005)
-#pragma warning(disable:4018)
+
 #include <string>
 
 #include <google/protobuf/stubs/common.h>
@@ -2007,10 +2002,46 @@ class BlobProto : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedField< double >*
       mutable_double_diff();
 
+  // optional int32 num = 1 [default = 0];
+  inline bool has_num() const;
+  inline void clear_num();
+  static const int kNumFieldNumber = 1;
+  inline ::google::protobuf::int32 num() const;
+  inline void set_num(::google::protobuf::int32 value);
+
+  // optional int32 channels = 2 [default = 0];
+  inline bool has_channels() const;
+  inline void clear_channels();
+  static const int kChannelsFieldNumber = 2;
+  inline ::google::protobuf::int32 channels() const;
+  inline void set_channels(::google::protobuf::int32 value);
+
+  // optional int32 height = 3 [default = 0];
+  inline bool has_height() const;
+  inline void clear_height();
+  static const int kHeightFieldNumber = 3;
+  inline ::google::protobuf::int32 height() const;
+  inline void set_height(::google::protobuf::int32 value);
+
+  // optional int32 width = 4 [default = 0];
+  inline bool has_width() const;
+  inline void clear_width();
+  static const int kWidthFieldNumber = 4;
+  inline ::google::protobuf::int32 width() const;
+  inline void set_width(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:BlobProto)
  private:
   inline void set_has_shape();
   inline void clear_has_shape();
+  inline void set_has_num();
+  inline void clear_has_num();
+  inline void set_has_channels();
+  inline void clear_has_channels();
+  inline void set_has_height();
+  inline void clear_has_height();
+  inline void set_has_width();
+  inline void clear_has_width();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -2025,6 +2056,10 @@ class BlobProto : public ::google::protobuf::Message {
   mutable int _double_data_cached_byte_size_;
   ::google::protobuf::RepeatedField< double > double_diff_;
   mutable int _double_diff_cached_byte_size_;
+  ::google::protobuf::int32 num_;
+  ::google::protobuf::int32 channels_;
+  ::google::protobuf::int32 height_;
+  ::google::protobuf::int32 width_;
   friend void  protobuf_AddDesc_dragon_2eproto();
   friend void protobuf_AssignDesc_dragon_2eproto();
   friend void protobuf_ShutdownFile_dragon_2eproto();
@@ -8112,6 +8147,102 @@ inline ::google::protobuf::RepeatedField< double >*
 BlobProto::mutable_double_diff() {
   // @@protoc_insertion_point(field_mutable_list:BlobProto.double_diff)
   return &double_diff_;
+}
+
+// optional int32 num = 1 [default = 0];
+inline bool BlobProto::has_num() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void BlobProto::set_has_num() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void BlobProto::clear_has_num() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void BlobProto::clear_num() {
+  num_ = 0;
+  clear_has_num();
+}
+inline ::google::protobuf::int32 BlobProto::num() const {
+  // @@protoc_insertion_point(field_get:BlobProto.num)
+  return num_;
+}
+inline void BlobProto::set_num(::google::protobuf::int32 value) {
+  set_has_num();
+  num_ = value;
+  // @@protoc_insertion_point(field_set:BlobProto.num)
+}
+
+// optional int32 channels = 2 [default = 0];
+inline bool BlobProto::has_channels() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void BlobProto::set_has_channels() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void BlobProto::clear_has_channels() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void BlobProto::clear_channels() {
+  channels_ = 0;
+  clear_has_channels();
+}
+inline ::google::protobuf::int32 BlobProto::channels() const {
+  // @@protoc_insertion_point(field_get:BlobProto.channels)
+  return channels_;
+}
+inline void BlobProto::set_channels(::google::protobuf::int32 value) {
+  set_has_channels();
+  channels_ = value;
+  // @@protoc_insertion_point(field_set:BlobProto.channels)
+}
+
+// optional int32 height = 3 [default = 0];
+inline bool BlobProto::has_height() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void BlobProto::set_has_height() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void BlobProto::clear_has_height() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void BlobProto::clear_height() {
+  height_ = 0;
+  clear_has_height();
+}
+inline ::google::protobuf::int32 BlobProto::height() const {
+  // @@protoc_insertion_point(field_get:BlobProto.height)
+  return height_;
+}
+inline void BlobProto::set_height(::google::protobuf::int32 value) {
+  set_has_height();
+  height_ = value;
+  // @@protoc_insertion_point(field_set:BlobProto.height)
+}
+
+// optional int32 width = 4 [default = 0];
+inline bool BlobProto::has_width() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void BlobProto::set_has_width() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void BlobProto::clear_has_width() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void BlobProto::clear_width() {
+  width_ = 0;
+  clear_has_width();
+}
+inline ::google::protobuf::int32 BlobProto::width() const {
+  // @@protoc_insertion_point(field_get:BlobProto.width)
+  return width_;
+}
+inline void BlobProto::set_width(::google::protobuf::int32 value) {
+  set_has_width();
+  width_ = value;
+  // @@protoc_insertion_point(field_set:BlobProto.width)
 }
 
 // -------------------------------------------------------------------

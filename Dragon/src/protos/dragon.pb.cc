@@ -331,12 +331,16 @@ void protobuf_AssignDesc_dragon_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BlobShape));
   BlobProto_descriptor_ = file->message_type(8);
-  static const int BlobProto_offsets_[5] = {
+  static const int BlobProto_offsets_[9] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, shape_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, data_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, diff_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, double_data_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, double_diff_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, num_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, channels_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, height_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlobProto, width_),
   };
   BlobProto_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -1022,123 +1026,125 @@ void protobuf_AddDesc_dragon_2eproto() {
     "\022\035\n\016force_backward\030\004 \001(\010:\005false\022\030\n\005state"
     "\030\005 \001(\0132\t.NetState\022\031\n\ndebug_info\030\006 \001(\010:\005f"
     "alse\022\036\n\005layer\030d \003(\0132\017.LayerParameter\"\034\n\t"
-    "BlobShape\022\017\n\003dim\030\001 \003(\003B\002\020\001\"|\n\tBlobProto\022"
-    "\031\n\005shape\030\007 \001(\0132\n.BlobShape\022\020\n\004data\030\005 \003(\002"
-    "B\002\020\001\022\020\n\004diff\030\006 \003(\002B\002\020\001\022\027\n\013double_data\030\010 "
-    "\003(\001B\002\020\001\022\027\n\013double_diff\030\t \003(\001B\002\020\001\"\247\001\n\tPar"
-    "amSpec\022\014\n\004name\030\001 \001(\t\022+\n\nshare_mode\030\002 \001(\016"
-    "2\027.ParamSpec.DimCheckMode\022\022\n\007lr_mult\030\003 \001"
-    "(\002:\0011\022\025\n\ndecay_mult\030\004 \001(\002:\0011\"4\n\014DimCheck"
-    "Mode\022\017\n\013STRICT_MODE\020\000\022\023\n\017PERMISSIVE_MODE"
-    "\020\001\"\247\001\n\rDataParameter\022\016\n\006source\030\001 \001(\t\022\022\n\n"
-    "batch_size\030\002 \001(\r\022(\n\007backend\030\003 \001(\0162\021.Data"
-    "Parameter.DB:\004LMDB\022\022\n\007prefech\030\004 \001(\r:\0014\022\027"
-    "\n\titeration\030\005 \001(\010:\004true\"\033\n\002DB\022\013\n\007LEVELDB"
-    "\020\000\022\010\n\004LMDB\020\001\"\266\001\n\027TransformationParameter"
-    "\022\020\n\005scale\030\001 \001(\002:\0011\022\025\n\006mirror\030\002 \001(\010:\005fals"
-    "e\022\024\n\tcrop_size\030\003 \001(\r:\0010\022\021\n\tmean_file\030\004 \001"
-    "(\t\022\022\n\nmean_value\030\005 \003(\002\022\032\n\013force_color\030\006 "
-    "\001(\010:\005false\022\031\n\nforce_gray\030\007 \001(\010:\005false\"\205\t"
-    "\n\016LayerParameter\022\014\n\004name\030\001 \001(\t\022\014\n\004type\030\002"
-    " \001(\t\022\016\n\006bottom\030\003 \003(\t\022\013\n\003top\030\004 \003(\t\022\025\n\005pha"
-    "se\030\n \001(\0162\006.Phase\022\023\n\013loss_weight\030\005 \003(\002\022\025\n"
-    "\rresult_weight\030\036 \003(\010\022\031\n\005param\030\006 \003(\0132\n.Pa"
-    "ramSpec\022\031\n\005blobs\030\007 \003(\0132\n.BlobProto\022\"\n\nda"
-    "ta_param\030\010 \001(\0132\016.DataParameter\0221\n\017transf"
-    "orm_param\030\t \001(\0132\030.TransformationParamete"
-    "r\022\"\n\nrelu_param\030\023 \001(\0132\016.ReLUParameter\0220\n"
-    "\021convolution_param\030\013 \001(\0132\025.ConvolutionPa"
-    "rameter\022(\n\rpooling_param\030\014 \001(\0132\021.Pooling"
-    "Parameter\0223\n\023inner_product_param\030\r \001(\0132\026"
-    ".InnerProductParameter\022\"\n\nloss_param\030\016 \001"
-    "(\0132\016.LossParameter\022*\n\016accuracy_param\030\017 \001"
-    "(\0132\022.AccuracyParameter\022-\n\020batch_norm_par"
-    "am\030\024 \001(\0132\023.BatchNormParameter\022(\n\rdropout"
-    "_param\030\025 \001(\0132\021.DropoutParameter\022\"\n\nlstm_"
-    "param\030\026 \001(\0132\016.LSTMParameter\022&\n\014python_pa"
-    "ram\030\027 \001(\0132\020.PythonParameter\022/\n\021roi_pooli"
-    "ng_param\030\030 \001(\0132\024.ROIPoolingParameter\0224\n\024"
-    "smooth_l1_loss_param\030\031 \001(\0132\026.SmoothL1Los"
-    "sParameter\022(\n\rreshape_param\030\032 \001(\0132\021.Resh"
-    "apeParameter\022 \n\tlrn_param\030\033 \001(\0132\r.LRNPar"
-    "ameter\022$\n\013power_param\030\034 \001(\0132\017.PowerParam"
-    "eter\022(\n\reltwise_param\030\035 \001(\0132\021.EltwisePar"
-    "ameter\022\"\n\ncrop_param\030\037 \001(\0132\016.CropParamet"
-    "er\022/\n\021image_files_param\030e \001(\0132\024.ImageFil"
-    "esParameter\022(\n\rsoftmax_param\030\020 \001(\0132\021.Sof"
-    "tmaxParameter\022\036\n\007include\030\021 \003(\0132\r.NetStat"
-    "eRule\022\036\n\007exclude\030\022 \003(\0132\r.NetStateRule\"\324\003"
-    "\n\024ConvolutionParameter\022\022\n\nnum_output\030\001 \001"
-    "(\r\022\027\n\tbias_term\030\002 \001(\010:\004true\022\013\n\003pad\030\003 \003(\r"
-    "\022\016\n\006kernel\030\004 \003(\r\022\016\n\006stride\030\005 \003(\r\022\020\n\005grou"
-    "p\030\006 \001(\r:\0011\022\'\n\rweight_filler\030\007 \001(\0132\020.Fill"
-    "erParameter\022%\n\013bias_filler\030\010 \001(\0132\020.Fille"
-    "rParameter\022\020\n\005pad_h\030\t \001(\r:\0010\022\020\n\005pad_w\030\n "
-    "\001(\r:\0010\022\020\n\010kernel_h\030\013 \001(\r\022\020\n\010kernel_w\030\014 \001"
-    "(\r\022\020\n\010stride_h\030\r \001(\r\022\020\n\010stride_w\030\016 \001(\r\0225"
-    "\n\006engine\030\017 \001(\0162\034.ConvolutionParameter.En"
-    "gine:\007DEFAULT\022\017\n\004axis\030\020 \001(\005:\0011\022\036\n\017force_"
-    "nd_im2col\030\021 \001(\010:\005false\",\n\006Engine\022\013\n\007DEFA"
-    "ULT\020\000\022\n\n\006DRAGON\020\001\022\t\n\005CUDNN\020\002\"\214\003\n\020Pooling"
-    "Parameter\022-\n\006method\030\001 \001(\0162\030.PoolingParam"
-    "eter.Method:\003MAX\022\016\n\003pad\030\002 \001(\r:\0010\022\016\n\006kern"
-    "el\030\003 \001(\r\022\021\n\006stride\030\004 \001(\r:\0011\022\020\n\005pad_h\030\005 \001"
-    "(\r:\0010\022\020\n\005pad_w\030\006 \001(\r:\0010\022\020\n\010kernel_h\030\007 \001("
-    "\r\022\020\n\010kernel_w\030\010 \001(\r\022\020\n\010stride_h\030\t \001(\r\022\020\n"
-    "\010stride_w\030\n \001(\r\0221\n\006engine\030\013 \001(\0162\030.Poolin"
-    "gParameter.Engine:\007DEFAULT\022\035\n\016global_poo"
-    "ling\030\014 \001(\010:\005false\"*\n\006Method\022\007\n\003MAX\020\000\022\007\n\003"
-    "AVG\020\001\022\016\n\nSTOCHASTIC\020\002\",\n\006Engine\022\013\n\007DEFAU"
-    "LT\020\000\022\n\n\006DRAGON\020\001\022\t\n\005CUDNN\020\002\"\245\001\n\025InnerPro"
-    "ductParameter\022\022\n\nnum_output\030\001 \001(\r\022\027\n\tbia"
-    "s_term\030\002 \001(\010:\004true\022\'\n\rweight_filler\030\003 \001("
-    "\0132\020.FillerParameter\022%\n\013bias_filler\030\004 \001(\013"
-    "2\020.FillerParameter\022\017\n\004axis\030\005 \001(\005:\0011\"\204\001\n\020"
-    "SoftmaxParameter\0221\n\006engine\030\001 \001(\0162\030.Softm"
-    "axParameter.Engine:\007DEFAULT\022\017\n\004axis\030\002 \001("
-    "\005:\0011\",\n\006Engine\022\013\n\007DEFAULT\020\000\022\n\n\006DRAGON\020\001\022"
-    "\t\n\005CUDNN\020\002\">\n\rLossParameter\022\024\n\014ignore_la"
-    "bel\030\001 \001(\005\022\027\n\tnormalize\030\002 \001(\010:\004true\"L\n\021Ac"
-    "curacyParameter\022\020\n\005top_k\030\001 \001(\r:\0011\022\017\n\004axi"
-    "s\030\002 \001(\005:\0011\022\024\n\014ignore_label\030\003 \001(\005\"\210\001\n\rReL"
-    "UParameter\022\031\n\016negative_slope\030\001 \001(\002:\0010\022.\n"
-    "\006engine\030\002 \001(\0162\025.ReLUParameter.Engine:\007DE"
-    "FAULT\",\n\006Engine\022\013\n\007DEFAULT\020\000\022\n\n\006DRAGON\020\001"
-    "\022\t\n\005CUDNN\020\002\"^\n\022BatchNormParameter\022\036\n\020use"
-    "_global_stats\030\001 \001(\010:\004true\022\023\n\005decay\030\003 \001(\002"
-    ":\0040.95\022\023\n\003eps\030\002 \001(\002:\0061e-010\"%\n\020DropoutPa"
-    "rameter\022\021\n\004prob\030\001 \001(\002:\0030.5\"\251\001\n\rLSTMParam"
-    "eter\022\022\n\nnum_output\030\001 \001(\r\022\035\n\022clipping_thr"
-    "eshold\030\002 \001(\002:\0010\022\'\n\rweight_filler\030\003 \001(\0132\020"
-    ".FillerParameter\022%\n\013bias_filler\030\004 \001(\0132\020."
-    "FillerParameter\022\025\n\nbatch_size\030\005 \001(\r:\0011\"g"
-    "\n\017PythonParameter\022\016\n\006module\030\001 \001(\t\022\r\n\005lay"
-    "er\030\002 \001(\t\022\023\n\tparam_str\030\003 \001(\t:\000\022 \n\021share_i"
-    "n_parallel\030\004 \001(\010:\005false\"Y\n\023ROIPoolingPar"
-    "ameter\022\023\n\010pooled_h\030\001 \001(\r:\0010\022\023\n\010pooled_w\030"
-    "\002 \001(\r:\0010\022\030\n\rspatial_scale\030\003 \001(\002:\0011\")\n\025Sm"
-    "oothL1LossParameter\022\020\n\005sigma\030\001 \001(\002:\0011\"T\n"
-    "\020ReshapeParameter\022\031\n\005shape\030\001 \001(\0132\n.BlobS"
-    "hape\022\017\n\004axis\030\002 \001(\005:\0010\022\024\n\010num_axes\030\003 \001(\005:"
-    "\002-1\"\254\002\n\014LRNParameter\022\025\n\nlocal_size\030\001 \001(\r"
-    ":\0015\022\020\n\005alpha\030\002 \001(\002:\0011\022\022\n\004beta\030\003 \001(\002:\0040.7"
-    "5\022>\n\013norm_region\030\004 \001(\0162\030.LRNParameter.No"
-    "rmRegion:\017ACROSS_CHANNELS\022\014\n\001k\030\005 \001(\002:\0011\022"
-    "-\n\006engine\030\006 \001(\0162\024.LRNParameter.Engine:\007D"
-    "EFAULT\"5\n\nNormRegion\022\023\n\017ACROSS_CHANNELS\020"
-    "\000\022\022\n\016WITHIN_CHANNEL\020\001\"+\n\006Engine\022\013\n\007DEFAU"
-    "LT\020\000\022\t\n\005CAFFE\020\001\022\t\n\005CUDNN\020\002\"F\n\016PowerParam"
-    "eter\022\020\n\005power\030\001 \001(\002:\0011\022\020\n\005scale\030\002 \001(\002:\0011"
-    "\022\020\n\005shift\030\003 \001(\002:\0010\"\237\001\n\020EltwiseParameter\022"
-    "3\n\toperation\030\001 \001(\0162\033.EltwiseParameter.El"
-    "twiseOp:\003SUM\022\r\n\005coeff\030\002 \003(\002\022\036\n\020stable_pr"
-    "od_grad\030\003 \001(\010:\004true\"\'\n\tEltwiseOp\022\010\n\004PROD"
-    "\020\000\022\007\n\003SUM\020\001\022\007\n\003MAX\020\002\"x\n\023ImageFilesParame"
-    "ter\022\021\n\ttext_file\030\001 \001(\t\022\023\n\013image_files\030\002 "
-    "\003(\t\022\037\n\013input_shape\030\003 \001(\0132\n.BlobShape\022\030\n\n"
-    "use_static\030\004 \001(\010:\004true\"0\n\rCropParameter\022"
-    "\017\n\004axis\030\001 \001(\005:\0012\022\016\n\006offset\030\002 \003(\r*\034\n\005Phas"
-    "e\022\t\n\005TRAIN\020\000\022\010\n\004TEST\020\001", 6822);
+    "BlobShape\022\017\n\003dim\030\001 \003(\003B\002\020\001\"\306\001\n\tBlobProto"
+    "\022\031\n\005shape\030\007 \001(\0132\n.BlobShape\022\020\n\004data\030\005 \003("
+    "\002B\002\020\001\022\020\n\004diff\030\006 \003(\002B\002\020\001\022\027\n\013double_data\030\010"
+    " \003(\001B\002\020\001\022\027\n\013double_diff\030\t \003(\001B\002\020\001\022\016\n\003num"
+    "\030\001 \001(\005:\0010\022\023\n\010channels\030\002 \001(\005:\0010\022\021\n\006height"
+    "\030\003 \001(\005:\0010\022\020\n\005width\030\004 \001(\005:\0010\"\247\001\n\tParamSpe"
+    "c\022\014\n\004name\030\001 \001(\t\022+\n\nshare_mode\030\002 \001(\0162\027.Pa"
+    "ramSpec.DimCheckMode\022\022\n\007lr_mult\030\003 \001(\002:\0011"
+    "\022\025\n\ndecay_mult\030\004 \001(\002:\0011\"4\n\014DimCheckMode\022"
+    "\017\n\013STRICT_MODE\020\000\022\023\n\017PERMISSIVE_MODE\020\001\"\247\001"
+    "\n\rDataParameter\022\016\n\006source\030\001 \001(\t\022\022\n\nbatch"
+    "_size\030\002 \001(\r\022(\n\007backend\030\003 \001(\0162\021.DataParam"
+    "eter.DB:\004LMDB\022\022\n\007prefech\030\004 \001(\r:\0014\022\027\n\tite"
+    "ration\030\005 \001(\010:\004true\"\033\n\002DB\022\013\n\007LEVELDB\020\000\022\010\n"
+    "\004LMDB\020\001\"\266\001\n\027TransformationParameter\022\020\n\005s"
+    "cale\030\001 \001(\002:\0011\022\025\n\006mirror\030\002 \001(\010:\005false\022\024\n\t"
+    "crop_size\030\003 \001(\r:\0010\022\021\n\tmean_file\030\004 \001(\t\022\022\n"
+    "\nmean_value\030\005 \003(\002\022\032\n\013force_color\030\006 \001(\010:\005"
+    "false\022\031\n\nforce_gray\030\007 \001(\010:\005false\"\205\t\n\016Lay"
+    "erParameter\022\014\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022"
+    "\016\n\006bottom\030\003 \003(\t\022\013\n\003top\030\004 \003(\t\022\025\n\005phase\030\n "
+    "\001(\0162\006.Phase\022\023\n\013loss_weight\030\005 \003(\002\022\025\n\rresu"
+    "lt_weight\030\036 \003(\010\022\031\n\005param\030\006 \003(\0132\n.ParamSp"
+    "ec\022\031\n\005blobs\030\007 \003(\0132\n.BlobProto\022\"\n\ndata_pa"
+    "ram\030\010 \001(\0132\016.DataParameter\0221\n\017transform_p"
+    "aram\030\t \001(\0132\030.TransformationParameter\022\"\n\n"
+    "relu_param\030\023 \001(\0132\016.ReLUParameter\0220\n\021conv"
+    "olution_param\030\013 \001(\0132\025.ConvolutionParamet"
+    "er\022(\n\rpooling_param\030\014 \001(\0132\021.PoolingParam"
+    "eter\0223\n\023inner_product_param\030\r \001(\0132\026.Inne"
+    "rProductParameter\022\"\n\nloss_param\030\016 \001(\0132\016."
+    "LossParameter\022*\n\016accuracy_param\030\017 \001(\0132\022."
+    "AccuracyParameter\022-\n\020batch_norm_param\030\024 "
+    "\001(\0132\023.BatchNormParameter\022(\n\rdropout_para"
+    "m\030\025 \001(\0132\021.DropoutParameter\022\"\n\nlstm_param"
+    "\030\026 \001(\0132\016.LSTMParameter\022&\n\014python_param\030\027"
+    " \001(\0132\020.PythonParameter\022/\n\021roi_pooling_pa"
+    "ram\030\030 \001(\0132\024.ROIPoolingParameter\0224\n\024smoot"
+    "h_l1_loss_param\030\031 \001(\0132\026.SmoothL1LossPara"
+    "meter\022(\n\rreshape_param\030\032 \001(\0132\021.ReshapePa"
+    "rameter\022 \n\tlrn_param\030\033 \001(\0132\r.LRNParamete"
+    "r\022$\n\013power_param\030\034 \001(\0132\017.PowerParameter\022"
+    "(\n\reltwise_param\030\035 \001(\0132\021.EltwiseParamete"
+    "r\022\"\n\ncrop_param\030\037 \001(\0132\016.CropParameter\022/\n"
+    "\021image_files_param\030e \001(\0132\024.ImageFilesPar"
+    "ameter\022(\n\rsoftmax_param\030\020 \001(\0132\021.SoftmaxP"
+    "arameter\022\036\n\007include\030\021 \003(\0132\r.NetStateRule"
+    "\022\036\n\007exclude\030\022 \003(\0132\r.NetStateRule\"\324\003\n\024Con"
+    "volutionParameter\022\022\n\nnum_output\030\001 \001(\r\022\027\n"
+    "\tbias_term\030\002 \001(\010:\004true\022\013\n\003pad\030\003 \003(\r\022\016\n\006k"
+    "ernel\030\004 \003(\r\022\016\n\006stride\030\005 \003(\r\022\020\n\005group\030\006 \001"
+    "(\r:\0011\022\'\n\rweight_filler\030\007 \001(\0132\020.FillerPar"
+    "ameter\022%\n\013bias_filler\030\010 \001(\0132\020.FillerPara"
+    "meter\022\020\n\005pad_h\030\t \001(\r:\0010\022\020\n\005pad_w\030\n \001(\r:\001"
+    "0\022\020\n\010kernel_h\030\013 \001(\r\022\020\n\010kernel_w\030\014 \001(\r\022\020\n"
+    "\010stride_h\030\r \001(\r\022\020\n\010stride_w\030\016 \001(\r\0225\n\006eng"
+    "ine\030\017 \001(\0162\034.ConvolutionParameter.Engine:"
+    "\007DEFAULT\022\017\n\004axis\030\020 \001(\005:\0011\022\036\n\017force_nd_im"
+    "2col\030\021 \001(\010:\005false\",\n\006Engine\022\013\n\007DEFAULT\020\000"
+    "\022\n\n\006DRAGON\020\001\022\t\n\005CUDNN\020\002\"\214\003\n\020PoolingParam"
+    "eter\022-\n\006method\030\001 \001(\0162\030.PoolingParameter."
+    "Method:\003MAX\022\016\n\003pad\030\002 \001(\r:\0010\022\016\n\006kernel\030\003 "
+    "\001(\r\022\021\n\006stride\030\004 \001(\r:\0011\022\020\n\005pad_h\030\005 \001(\r:\0010"
+    "\022\020\n\005pad_w\030\006 \001(\r:\0010\022\020\n\010kernel_h\030\007 \001(\r\022\020\n\010"
+    "kernel_w\030\010 \001(\r\022\020\n\010stride_h\030\t \001(\r\022\020\n\010stri"
+    "de_w\030\n \001(\r\0221\n\006engine\030\013 \001(\0162\030.PoolingPara"
+    "meter.Engine:\007DEFAULT\022\035\n\016global_pooling\030"
+    "\014 \001(\010:\005false\"*\n\006Method\022\007\n\003MAX\020\000\022\007\n\003AVG\020\001"
+    "\022\016\n\nSTOCHASTIC\020\002\",\n\006Engine\022\013\n\007DEFAULT\020\000\022"
+    "\n\n\006DRAGON\020\001\022\t\n\005CUDNN\020\002\"\245\001\n\025InnerProductP"
+    "arameter\022\022\n\nnum_output\030\001 \001(\r\022\027\n\tbias_ter"
+    "m\030\002 \001(\010:\004true\022\'\n\rweight_filler\030\003 \001(\0132\020.F"
+    "illerParameter\022%\n\013bias_filler\030\004 \001(\0132\020.Fi"
+    "llerParameter\022\017\n\004axis\030\005 \001(\005:\0011\"\204\001\n\020Softm"
+    "axParameter\0221\n\006engine\030\001 \001(\0162\030.SoftmaxPar"
+    "ameter.Engine:\007DEFAULT\022\017\n\004axis\030\002 \001(\005:\0011\""
+    ",\n\006Engine\022\013\n\007DEFAULT\020\000\022\n\n\006DRAGON\020\001\022\t\n\005CU"
+    "DNN\020\002\">\n\rLossParameter\022\024\n\014ignore_label\030\001"
+    " \001(\005\022\027\n\tnormalize\030\002 \001(\010:\004true\"L\n\021Accurac"
+    "yParameter\022\020\n\005top_k\030\001 \001(\r:\0011\022\017\n\004axis\030\002 \001"
+    "(\005:\0011\022\024\n\014ignore_label\030\003 \001(\005\"\210\001\n\rReLUPara"
+    "meter\022\031\n\016negative_slope\030\001 \001(\002:\0010\022.\n\006engi"
+    "ne\030\002 \001(\0162\025.ReLUParameter.Engine:\007DEFAULT"
+    "\",\n\006Engine\022\013\n\007DEFAULT\020\000\022\n\n\006DRAGON\020\001\022\t\n\005C"
+    "UDNN\020\002\"^\n\022BatchNormParameter\022\036\n\020use_glob"
+    "al_stats\030\001 \001(\010:\004true\022\023\n\005decay\030\003 \001(\002:\0040.9"
+    "5\022\023\n\003eps\030\002 \001(\002:\0061e-010\"%\n\020DropoutParamet"
+    "er\022\021\n\004prob\030\001 \001(\002:\0030.5\"\251\001\n\rLSTMParameter\022"
+    "\022\n\nnum_output\030\001 \001(\r\022\035\n\022clipping_threshol"
+    "d\030\002 \001(\002:\0010\022\'\n\rweight_filler\030\003 \001(\0132\020.Fill"
+    "erParameter\022%\n\013bias_filler\030\004 \001(\0132\020.Fille"
+    "rParameter\022\025\n\nbatch_size\030\005 \001(\r:\0011\"g\n\017Pyt"
+    "honParameter\022\016\n\006module\030\001 \001(\t\022\r\n\005layer\030\002 "
+    "\001(\t\022\023\n\tparam_str\030\003 \001(\t:\000\022 \n\021share_in_par"
+    "allel\030\004 \001(\010:\005false\"Y\n\023ROIPoolingParamete"
+    "r\022\023\n\010pooled_h\030\001 \001(\r:\0010\022\023\n\010pooled_w\030\002 \001(\r"
+    ":\0010\022\030\n\rspatial_scale\030\003 \001(\002:\0011\")\n\025SmoothL"
+    "1LossParameter\022\020\n\005sigma\030\001 \001(\002:\0011\"T\n\020Resh"
+    "apeParameter\022\031\n\005shape\030\001 \001(\0132\n.BlobShape\022"
+    "\017\n\004axis\030\002 \001(\005:\0010\022\024\n\010num_axes\030\003 \001(\005:\002-1\"\254"
+    "\002\n\014LRNParameter\022\025\n\nlocal_size\030\001 \001(\r:\0015\022\020"
+    "\n\005alpha\030\002 \001(\002:\0011\022\022\n\004beta\030\003 \001(\002:\0040.75\022>\n\013"
+    "norm_region\030\004 \001(\0162\030.LRNParameter.NormReg"
+    "ion:\017ACROSS_CHANNELS\022\014\n\001k\030\005 \001(\002:\0011\022-\n\006en"
+    "gine\030\006 \001(\0162\024.LRNParameter.Engine:\007DEFAUL"
+    "T\"5\n\nNormRegion\022\023\n\017ACROSS_CHANNELS\020\000\022\022\n\016"
+    "WITHIN_CHANNEL\020\001\"+\n\006Engine\022\013\n\007DEFAULT\020\000\022"
+    "\t\n\005CAFFE\020\001\022\t\n\005CUDNN\020\002\"F\n\016PowerParameter\022"
+    "\020\n\005power\030\001 \001(\002:\0011\022\020\n\005scale\030\002 \001(\002:\0011\022\020\n\005s"
+    "hift\030\003 \001(\002:\0010\"\237\001\n\020EltwiseParameter\0223\n\top"
+    "eration\030\001 \001(\0162\033.EltwiseParameter.Eltwise"
+    "Op:\003SUM\022\r\n\005coeff\030\002 \003(\002\022\036\n\020stable_prod_gr"
+    "ad\030\003 \001(\010:\004true\"\'\n\tEltwiseOp\022\010\n\004PROD\020\000\022\007\n"
+    "\003SUM\020\001\022\007\n\003MAX\020\002\"x\n\023ImageFilesParameter\022\021"
+    "\n\ttext_file\030\001 \001(\t\022\023\n\013image_files\030\002 \003(\t\022\037"
+    "\n\013input_shape\030\003 \001(\0132\n.BlobShape\022\030\n\nuse_s"
+    "tatic\030\004 \001(\010:\004true\"0\n\rCropParameter\022\017\n\004ax"
+    "is\030\001 \001(\005:\0012\022\016\n\006offset\030\002 \003(\r*\034\n\005Phase\022\t\n\005"
+    "TRAIN\020\000\022\010\n\004TEST\020\001", 6897);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dragon.proto", &protobuf_RegisterTypes);
   Datum::default_instance_ = new Datum();
@@ -6154,6 +6160,10 @@ const int BlobProto::kDataFieldNumber;
 const int BlobProto::kDiffFieldNumber;
 const int BlobProto::kDoubleDataFieldNumber;
 const int BlobProto::kDoubleDiffFieldNumber;
+const int BlobProto::kNumFieldNumber;
+const int BlobProto::kChannelsFieldNumber;
+const int BlobProto::kHeightFieldNumber;
+const int BlobProto::kWidthFieldNumber;
 #endif  // !_MSC_VER
 
 BlobProto::BlobProto()
@@ -6176,6 +6186,10 @@ BlobProto::BlobProto(const BlobProto& from)
 void BlobProto::SharedCtor() {
   _cached_size_ = 0;
   shape_ = NULL;
+  num_ = 0;
+  channels_ = 0;
+  height_ = 0;
+  width_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -6212,9 +6226,27 @@ BlobProto* BlobProto::New() const {
 }
 
 void BlobProto::Clear() {
-  if (has_shape()) {
-    if (shape_ != NULL) shape_->::BlobShape::Clear();
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<BlobProto*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 225) {
+    ZR_(num_, height_);
+    if (has_shape()) {
+      if (shape_ != NULL) shape_->::BlobShape::Clear();
+    }
   }
+  width_ = 0;
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
   data_.Clear();
   diff_.Clear();
   double_data_.Clear();
@@ -6233,9 +6265,69 @@ bool BlobProto::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional int32 num = 1 [default = 0];
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &num_)));
+          set_has_num();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_channels;
+        break;
+      }
+
+      // optional int32 channels = 2 [default = 0];
+      case 2: {
+        if (tag == 16) {
+         parse_channels:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &channels_)));
+          set_has_channels();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_height;
+        break;
+      }
+
+      // optional int32 height = 3 [default = 0];
+      case 3: {
+        if (tag == 24) {
+         parse_height:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &height_)));
+          set_has_height();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_width;
+        break;
+      }
+
+      // optional int32 width = 4 [default = 0];
+      case 4: {
+        if (tag == 32) {
+         parse_width:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &width_)));
+          set_has_width();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_data;
+        break;
+      }
+
       // repeated float data = 5 [packed = true];
       case 5: {
         if (tag == 42) {
+         parse_data:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
                  input, this->mutable_data())));
@@ -6342,6 +6434,26 @@ failure:
 void BlobProto::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:BlobProto)
+  // optional int32 num = 1 [default = 0];
+  if (has_num()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->num(), output);
+  }
+
+  // optional int32 channels = 2 [default = 0];
+  if (has_channels()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->channels(), output);
+  }
+
+  // optional int32 height = 3 [default = 0];
+  if (has_height()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->height(), output);
+  }
+
+  // optional int32 width = 4 [default = 0];
+  if (has_width()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->width(), output);
+  }
+
   // repeated float data = 5 [packed = true];
   if (this->data_size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteTag(5, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
@@ -6398,6 +6510,26 @@ void BlobProto::SerializeWithCachedSizes(
 ::google::protobuf::uint8* BlobProto::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:BlobProto)
+  // optional int32 num = 1 [default = 0];
+  if (has_num()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->num(), target);
+  }
+
+  // optional int32 channels = 2 [default = 0];
+  if (has_channels()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->channels(), target);
+  }
+
+  // optional int32 height = 3 [default = 0];
+  if (has_height()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->height(), target);
+  }
+
+  // optional int32 width = 4 [default = 0];
+  if (has_width()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->width(), target);
+  }
+
   // repeated float data = 5 [packed = true];
   if (this->data_size() > 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
@@ -6478,6 +6610,36 @@ int BlobProto::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->shape());
+    }
+
+    // optional int32 num = 1 [default = 0];
+    if (has_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->num());
+    }
+
+    // optional int32 channels = 2 [default = 0];
+    if (has_channels()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->channels());
+    }
+
+    // optional int32 height = 3 [default = 0];
+    if (has_height()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->height());
+    }
+
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional int32 width = 4 [default = 0];
+    if (has_width()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->width());
     }
 
   }
@@ -6570,6 +6732,20 @@ void BlobProto::MergeFrom(const BlobProto& from) {
     if (from.has_shape()) {
       mutable_shape()->::BlobShape::MergeFrom(from.shape());
     }
+    if (from.has_num()) {
+      set_num(from.num());
+    }
+    if (from.has_channels()) {
+      set_channels(from.channels());
+    }
+    if (from.has_height()) {
+      set_height(from.height());
+    }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (from.has_width()) {
+      set_width(from.width());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -6598,6 +6774,10 @@ void BlobProto::Swap(BlobProto* other) {
     diff_.Swap(&other->diff_);
     double_data_.Swap(&other->double_data_);
     double_diff_.Swap(&other->double_diff_);
+    std::swap(num_, other->num_);
+    std::swap(channels_, other->channels_);
+    std::swap(height_, other->height_);
+    std::swap(width_, other->width_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
