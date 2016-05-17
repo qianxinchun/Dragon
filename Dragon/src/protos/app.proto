@@ -1,0 +1,22 @@
+message Request{
+    //  specify a request task
+    //  e.g task="mood"
+    optional string task_name=1;
+    //  specify the request file paths
+    //  make sure that the path is vaild
+    repeated string files=2;
+}
+
+message Result{
+    optional string task_name=1;
+    enum ResultType{CLS=0;REG=1;}
+    optional ResultType type=2 [default=CLS];
+    optional uint32 num=3 [default=0];
+    repeated float float_data=4;
+    repeated int32 int_data=5;
+}
+
+message ResultGroup{
+    repeated Result results=1;
+    optional uint32 num=2 [default=0];
+}
