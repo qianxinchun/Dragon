@@ -12,7 +12,7 @@ public:
 	static bool stateMeetRule(const NetState& state, const NetStateRule& rule, const string& name);
 	static void filterNet(const NetParameter& param,NetParameter* filtered_param);
 	void reshape(){
-		for (int i = 0; i < layers.size(); i++) 
+		for (int i = 0; i < layers.size(); i++)
 			layers[i]->reshape(bottom_vecs[i], top_vecs[i]);
 	}
 	void Init(const NetParameter& in_param);
@@ -73,7 +73,7 @@ protected:
 	vector<vector<Blob<Dtype>*> > bottom_vecs;
 	vector<vector<int> > bottom_id_vecs;
 	vector<vector<bool> > bottoms_need_backward;
-	//	store for param 
+	//	store for param
 	vector<Dtype> blobs_loss_weight;
 	vector<vector<int> > param_id_vecs;
 	vector<string> param_display_names;
@@ -93,9 +93,9 @@ protected:
 	vector<Blob<Dtype>*> net_input_blobs;
 	vector<Blob<Dtype>*> net_output_blobs;
 	void appendTop(const NetParameter& param, const int layer_id, const int top_id,
-		set<string>* available_blobs, map<string, int>* blob_name_to_idx);
+		std::set<string>* available_blobs, map<string, int>* blob_name_to_idx);
 	int appendBottom(const NetParameter& param, const int layer_id, const int bottom_id,
-		set<string>* available_blobs, map<string, int>* blob_name_to_idx);
+		std::set<string>* available_blobs, map<string, int>* blob_name_to_idx);
 	void appendParam(const NetParameter& param, const int layer_id, const int param_id);
 };
 

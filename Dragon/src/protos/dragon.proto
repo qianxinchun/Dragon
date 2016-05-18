@@ -72,8 +72,8 @@ message SolverState{
 message FillerParameter{
     optional string type=1 [default='constant'];
     optional float value=2 [default=0];
-    optional float min=3 [default=0];
-    optional float max=4 [default=1];
+    optional float low=3 [default=0];
+    optional float high=4 [default=1];
     optional float mean=5 [default=0];
     optional float std=6 [default=1];
     optional int32 sparse=7 [default=-1];

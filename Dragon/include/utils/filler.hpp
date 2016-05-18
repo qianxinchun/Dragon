@@ -35,7 +35,7 @@ public:
 	UniformFiller(const FillerParameter& param) :Filler<Dtype>(param) {}
 	virtual void fill(Blob<Dtype>* ptr_blob){
 		CHECK(ptr_blob->count());
-		dragon_rng_uniform(ptr_blob->count(), param.min(), param.max(), ptr_blob->mutable_cpu_data());
+		dragon_rng_uniform(ptr_blob->count(), param.low(), param.high(), ptr_blob->mutable_cpu_data());
 	}
 
 };
