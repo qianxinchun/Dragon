@@ -3,6 +3,8 @@
 
 #include "../../layer.hpp"
 
+#define LEVEL 3
+
 template <typename Dtype>
 class CropLayer :public Layer < Dtype > {
 public:
@@ -22,6 +24,7 @@ private:
 		const vector<int>& offsets, vector<int> idxs, int cur_dim, const Dtype* src_data,
 		Dtype* dest_data, bool is_forward);
 	vector<int> offsets;
+	Blob<int> src_dims_blob, dest_dims_blob;
 };
 
 

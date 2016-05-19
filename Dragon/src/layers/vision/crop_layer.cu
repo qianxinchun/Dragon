@@ -1,21 +1,16 @@
 #include "layers/vision/crop_layer.hpp"
 
-//	a linear-mem copy kernel for the last two spatial axis
-//	we re-implement it which is much efficient that caffe-master version
+//	a linear-mem copy kernel for the last 'LEVEL' spatial axes
+//	we re-implement it which is much efficient than blvc-caffe version
+
 template <typename Dtype>
-__global__ void	CopyKernel(const int n, const int height, const int width,
-	const int src_outer_stride, const int src_inner_stride, const int dest_outer_stride, const int dest_inner_stride,
-	const Dtype* src, Dtype* dest){
+__global__ void	CopyKernel(const int n, const int* src_dims,const int* dest_dims,const Dtype* src, Dtype* dest){
 	CUDA_KERNEL_LOOP(idx, n){
-		/*
-		int src_start = idx / height*src_outer_stride
-			+ idx%height*src_inner_stride;
-		int dest_start = idx / height*dest_outer_stride
-			+ idx%height*dest_inner_stride;*/
-		int w = idx%width;
-		int h = (idx / width) % height;
-		int dest_idx = h*dest_inner_stride + w;
-		int src_idx = h*src_inner_stride + w;
+		int w = idx%dest_dims[LEVEL - 2];
+		int h = (idx / dest_dims[LEVEL - 2]) % dest_dims[LEVEL - 3];
+		int c = (idx / dest_dims[LEVEL - 2] / dest_dims[LEVEL - 3]);
+		int dest_idx = (c*dest_dims[LEVEL - 3] + h)*dest_dims[LEVEL - 2] + w;
+		int src_idx = (c*src_dims[LEVEL - 3] + h)*src_dims[LEVEL - 2] + w;
 		dest[dest_idx] = src[src_idx];
 	}
 }
@@ -27,7 +22,7 @@ void CropLayer<Dtype>::copy_gpu(const vector<Blob<Dtype>*> &bottom, const vector
 	Dtype* dest_data, bool is_forward){
 
 	//	recursive-term
-	if (cur_dim + 2 < top[0]->num_axes()){
+	if (cur_dim + LEVEL < top[0]->num_axes()){
 		for (int i = 0; i < top[0]->shape(cur_dim); i++){
 			//	store the pixel-idx of the current spatial axis
 			idxs[cur_dim] = i;
@@ -36,36 +31,33 @@ void CropLayer<Dtype>::copy_gpu(const vector<Blob<Dtype>*> &bottom, const vector
 		}
 	}
 	//	terminal-term
-	//	perform a linear-mem copy for the last two spatial axis
-	//	you can also perform a last-n parallel algorithms for cuda kernel function
+	//	perform a linear-mem copy for the last 'LEVEL' spatial axes
+	//	you can choose Level2 or Level3 parallel algorithms
 	else{
-		const int lines = top[0]->shape(cur_dim);
-		const int height = top[0]->shape(cur_dim);
-		const int width= top[0]->shape(cur_dim+1);
-		const int outer_num = height*width;
-		vector<int> idx_off(cur_dim + 2, 0);
+		int outer_dim = 1;
+		for (int i = 0; i < LEVEL; i++) outer_dim *= top[0]->shape(cur_dim + i);
+		vector<int> idx_off(cur_dim + LEVEL, 0);
 		for (int j = 0; j < cur_dim; j++) idx_off[j] = idxs[j] + offsets[j];
-		idx_off[cur_dim] = offsets[cur_dim];
-		idx_off[cur_dim+1] = offsets[cur_dim+1];
-		const int src_outer_stride =
-			bottom[0]->shape(cur_dim)*bottom[0]->shape(cur_dim + 1);
-		const int src_inner_stride = bottom[0]->shape(cur_dim + 1);
-		const int dest_outer_stride =
-			top[0]->shape(cur_dim)*top[0]->shape(cur_dim + 1);
-		const int dest_inner_stride = top[0]->shape(cur_dim + 1);
+		for (int j = 0; j < LEVEL; j++) idx_off[cur_dim+j] = offsets[cur_dim + j];;
+		for (int j = LEVEL-2; j >=0; j--){
+			int* src = src_dims_blob.mutable_cpu_data();
+			int* dest = dest_dims_blob.mutable_cpu_data();
+			dest[j] = top[0]->shape(cur_dim + j+1);
+			src[j] = bottom[0]->shape(cur_dim + j+1);
+		}
+		const int* src_dims = src_dims_blob.gpu_data();
+		const int* dest_dims = dest_dims_blob.gpu_data();
 		//
 		if (is_forward){
 			const Dtype* bottom_data = bottom[0]->gpu_data() + bottom[0]->offset(idx_off);
 			Dtype* top_data = top[0]->mutable_gpu_data() + top[0]->offset(idxs);
-			CopyKernel<Dtype> << <GET_BLOCKS(outer_num), CUDA_NUM_THREADS >> >(
-				outer_num, height, width, src_outer_stride, src_inner_stride,
-				dest_outer_stride, dest_inner_stride,bottom_data, top_data);
+			CopyKernel<Dtype> << <GET_BLOCKS(outer_dim), CUDA_NUM_THREADS >> >(
+				outer_dim, src_dims,dest_dims,bottom_data, top_data);
 		}else{
 			const Dtype* top_diff = top[0]->gpu_diff() + top[0]->offset(idxs);
 			Dtype* bottom_diff = bottom[0]->mutable_gpu_diff() + bottom[0]->offset(idx_off);
-			CopyKernel<Dtype> << <GET_BLOCKS(outer_num), CUDA_NUM_THREADS >> >(
-				outer_num, height, width, dest_outer_stride, dest_inner_stride,
-				src_outer_stride, src_inner_stride, top_diff, bottom_diff);
+			CopyKernel<Dtype> << <GET_BLOCKS(outer_dim), CUDA_NUM_THREADS >> >(
+				outer_dim,  dest_dims, src_dims, top_diff, bottom_diff);
 		}
 	}
 }
@@ -84,11 +76,12 @@ void CropLayer<Dtype>::backward_gpu(const vector<Blob<Dtype>*> &top,
 	if (!data_need_bp[0]) return;
 	const Dtype* top_diff = top[0]->gpu_diff();
 	Dtype* bottom_diff = bottom[0]->mutable_gpu_diff();
+
 	//	must clear the last diff due to the different shape according mini-batches
 	dragon_gpu_set(bottom[0]->count(), Dtype(0), bottom_diff);
+
 	vector<int> idxs(top[0]->num_axes(), 0);
 	copy_gpu(bottom, top, offsets, idxs, 0, top_diff, bottom_diff, false);
 }
-
 
 INSTANTIATE_LAYER_GPU_FUNCS(CropLayer);
