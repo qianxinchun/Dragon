@@ -28,6 +28,20 @@ public:
 protected:
 	virtual void computeUpdateValue(int param_id, Dtype rate);
 	virtual void applyUpdate();
+private:
+	void adadeltaUpdate(int n, Dtype* g, Dtype* h, Dtype* h2, Dtype momentum, Dtype eps, Dtype lr);
+};
+
+template <typename Dtype>
+class RMSPropSolver :public SGDSolver < Dtype > {
+public:
+	RMSPropSolver(const SolverParameter& param) :SGDSolver<Dtype>(param)	{ }
+	RMSPropSolver(const string& param_file) :SGDSolver<Dtype>(param_file)	{ }
+protected:
+	virtual void computeUpdateValue(int param_id, Dtype rate);
+	virtual void applyUpdate();
+private:
+	void rmspropUpdate(int n, Dtype* g, Dtype* h,Dtype momentum, Dtype eps, Dtype lr);
 };
 
 
